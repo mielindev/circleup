@@ -5,13 +5,13 @@ import {
   Post,
   toggleLike,
 } from "@/actions/post.action";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Card, CardContent } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
-import { formatDistanceToNow, set } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
 import {
@@ -195,16 +195,18 @@ const PostCard = ({ post, userId }: { post: Post; userId: string | null }) => {
                 <span>{likes}</span>
               </Button>
             ) : (
-              <SignInButton mode="modal">
-                <Button
-                  variant={"ghost"}
-                  size={"sm"}
-                  className="text-muted-foreground gap-2"
-                >
-                  <HeartIcon className="size-5" />
-                  <span>{likes}</span>
-                </Button>
-              </SignInButton>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button
+                    variant={"ghost"}
+                    size={"sm"}
+                    className="text-muted-foreground gap-2"
+                  >
+                    <HeartIcon className="size-5" />
+                    <span>{likes}</span>
+                  </Button>
+                </SignInButton>
+              </SignedOut>
             )}
 
             <Button

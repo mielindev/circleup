@@ -10,8 +10,14 @@ import {
 } from "./ui/sheet";
 import { Button } from "./ui/button";
 import Link from "next/link";
-import { SignOutButton } from "@clerk/nextjs";
-import { SignedOut, SignInButton, useAuth, useUser } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignOutButton,
+  SignedOut,
+  SignInButton,
+  useAuth,
+  useUser,
+} from "@clerk/nextjs";
 import { useState } from "react";
 
 const MobileNavbar = () => {
@@ -77,15 +83,17 @@ const MobileNavbar = () => {
                   </Link>
                 </Button>
 
-                <SignOutButton>
-                  <Button
-                    variant={"ghost"}
-                    className="flex items-center gap-3 justify-start"
-                  >
-                    <LogOut className="size-4" />
-                    <span className="text-md">Logout</span>
-                  </Button>
-                </SignOutButton>
+                <SignedIn>
+                  <SignOutButton>
+                    <Button
+                      variant={"ghost"}
+                      className="flex items-center gap-3 justify-start"
+                    >
+                      <LogOut className="size-4" />
+                      <span className="text-md">Logout</span>
+                    </Button>
+                  </SignOutButton>
+                </SignedIn>
               </>
             ) : (
               <SignedOut>
