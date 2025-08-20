@@ -11,12 +11,15 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
-import { SignInButton, useAuth } from "@clerk/clerk-react";
+import { SignedOut, SignInButton, useAuth, useUser } from "@clerk/clerk-react";
 import { useState } from "react";
 
 const MobileNavbar = () => {
   const [showMobileMenu, setshowMobileMenu] = useState(false);
   const { isSignedIn } = useAuth();
+  const { user } = useUser();
+  const profileSlug =
+    user?.username ?? user?.primaryEmailAddress?.emailAddress.split("@")[0];
   return (
     <div className="flex md:hidden items-center space-x-2">
       <ModeToggle />
@@ -66,7 +69,7 @@ const MobileNavbar = () => {
                   asChild
                 >
                   <Link
-                    href="/profile"
+                    href={`/profile${profileSlug}`}
                     onClick={() => setshowMobileMenu(false)}
                   >
                     <UserIcon className="size-4" />
@@ -85,9 +88,11 @@ const MobileNavbar = () => {
                 </SignOutButton>
               </>
             ) : (
-              <SignInButton mode="modal">
-                <Button variant={"default"}>Sign In</Button>
-              </SignInButton>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button variant={"default"}>Sign In</Button>
+                </SignInButton>
+              </SignedOut>
             )}
           </nav>
         </SheetContent>

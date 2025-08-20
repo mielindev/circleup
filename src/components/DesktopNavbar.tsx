@@ -1,12 +1,19 @@
+export const dynamic = "force-dynamic";
+
 import { currentUser } from "@clerk/nextjs/server";
 import ModeToggle from "./ModeToggle";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { BellIcon, HomeIcon, UserIcon } from "lucide-react";
-import { SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
 async function DesktopNavbar() {
   const user = await currentUser();
+
+  const profileSlug =
+    user?.username ??
+    user?.primaryEmailAddress?.emailAddress?.split("@")[0] ??
+    "me";
 
   return (
     <div className="hidden md:flex items-center space-x-4">
@@ -29,23 +36,22 @@ async function DesktopNavbar() {
           </Button>
 
           <Button variant={"ghost"} className="flex items-center gap-2" asChild>
-            <Link
-              href={`/profile/${
-                user.username ??
-                user.emailAddresses[0].emailAddress.split("@")[0]
-              }`}
-            >
+            <Link href={`/profile/${profileSlug}`}>
               <UserIcon className="size-4" />
               <span className="hidden lg:inline">Profile</span>
             </Link>
           </Button>
 
-          <UserButton />
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </>
       ) : (
-        <SignInButton mode="modal">
-          <Button variant={"default"}>Sign In</Button>
-        </SignInButton>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <Button variant={"default"}>Sign In</Button>
+          </SignInButton>
+        </SignedOut>
       )}
     </div>
   );

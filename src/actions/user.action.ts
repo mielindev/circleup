@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 
 const syncUser = async () => {
   try {
@@ -59,7 +58,7 @@ const getUserIdInDB = async () => {
 
   const user = await getUserByClerkId(clerkId);
 
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   return user?.id;
 };
