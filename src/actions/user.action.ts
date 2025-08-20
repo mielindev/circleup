@@ -30,8 +30,6 @@ const syncUser = async () => {
       },
     });
 
-    revalidatePath("/");
-
     return newUser;
   } catch (error) {
     console.error("Error syncing user:", error);
